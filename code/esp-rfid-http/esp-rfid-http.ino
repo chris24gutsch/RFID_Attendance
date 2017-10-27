@@ -190,6 +190,7 @@ void loop()
      
     Serial.println(F("Data did not go through!"));
     Serial.println(F("Please wait 15 seconds between scans."));
+    Serial.println(httpCode);
     } 
   else{ //Success
     //Beep! Piano keys to frequencies: http://www.sengpielaudio.com/KeyboardAndFrequencies.gif
@@ -209,7 +210,7 @@ void loop()
 
   status(GOOD);
 
-  delay(2000);
+  delay(1000); //Was 2000
 }
 
 
