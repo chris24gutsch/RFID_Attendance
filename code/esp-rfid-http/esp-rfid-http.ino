@@ -1,10 +1,11 @@
-
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <SoftwareSerial.h> // communication between ESP and RFID reader
 #include "SparkFun_UHF_RFID_Reader.h" //Library for controlling the M6E Nano module
 #include "util.h"
 
+#include <elapsedMillis.h> //https://playground.arduino.cc/Code/ElapsedMillis
+unsigned int interval = 15000;
 
 // Ensure the ESP shield 5V pin is NOT connected to the RFID shield.
 //   Clip off the pin is an easy but "permanent" solution.
@@ -79,7 +80,23 @@ void setup()
   //nano.enableDebugging(Serial);
   status(GOOD);
 
+  /*
+   * Initialize RTC module
+   */
+  //Serial.println("Initializing RTC Module");
+  //rtc.begin();
   
+  /*
+  if (!rtc.begin()) {
+    Serial.println("  Couldn't find RTC");
+    while (1);
+    }
+    
+  if (rtc.lostPower()) {
+    Serial.println("  RTC lost power");
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    }
+  */
   // Setup client-only mode, "station"
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
@@ -112,7 +129,7 @@ void loop()
   byte responseType = 0;
   byte count = 0;
 
-  while (responseType != RESPONSE_SUCCESS)//RESPONSE_IS_TAGFOUND)
+  while (responseType != RESPONSE_SUCCESS)//RESPONSE_IS_TAGFOUND
   {
     myEPClength = sizeof(myEPC); //Length of EPC is modified each time .readTagEPC is called
 
@@ -131,12 +148,12 @@ void loop()
   count = 0; //Reset count for RESPONSE while loop
   
   //Beep! Piano keys to frequencies: http://www.sengpielaudio.com/KeyboardAndFrequencies.gif
-  //tone(BUZZER1, 2093, 150); //C
-  //delay(150);
-  //tone(BUZZER1, 2349, 150); //D
-  //delay(150);
-  //tone(BUZZER1, 2637, 150); //E
-  //delay(150);
+  tone(BUZZER1, 2093, 150); //C
+  delay(150);
+  tone(BUZZER1, 2349, 150); //D
+  delay(150);
+  tone(BUZZER1, 2637, 150); //E
+  delay(150);
 
   //Print EPC
   Serial.print(F(" epc["));
@@ -178,39 +195,42 @@ void loop()
   int httpCode = http.GET();
   String response = http.getString();
   http.end();
+  Serial.print("HTTP response code: ");
+  Serial.println(httpCode);
+  Serial.println(response); 
 
-  if(response == "0"){ //If response is 0, then information didn't got through
-    //Set Status
-    status(ERROR);
+  responseType = 0; //Reset responseType
+  elapsedMillis timeElapsed;
+  while (timeElapsed < interval) { //While time elapsed is less than 15 seconds
+    responseType = nano.readTagEPC(myEPC, myEPClength, 500); //Scan for a new tag up to 500ms
+    if (responseType == RESPONSE_SUCCESS) {
+      delay(500);
+      
+      //Set Status
+      status(ERROR);
     
-    //Fail Tone
-    tone(BUZZER1, 660, 150); //E
-    delay(150);
-    tone(BUZZER1, 622, 150); //D#
+      //Fail Tone
+      tone(BUZZER1, 660, 150); //E
+      delay(150);
+      tone(BUZZER1, 622, 150); //D#
      
-    Serial.println(F("Data did not go through!"));
-    Serial.println(F("Please wait 15 seconds between scans."));
-    Serial.println(httpCode);
-    } 
-  else{ //Success
-    //Beep! Piano keys to frequencies: http://www.sengpielaudio.com/KeyboardAndFrequencies.gif
-    //Success Tone
-    tone(BUZZER1, 2093, 150); //C
-    delay(150);
-    tone(BUZZER1, 2349, 150); //D
-    delay(150);
-    tone(BUZZER1, 2637, 150); //E
-    delay(150);
-    
-    Serial.print("HTTP response code: ");
-    Serial.println(httpCode);
-    Serial.println(response); 
-    }
-  
+      Serial.println(F("Data did not go through!"));
+      Serial.println(F("Please wait 15 seconds between scans."));
+      
+      responseType = 0; //Reset Response
+      timeElapsed = 0;
+     }
+  }
+  //Ready to scan
+  tone(BUZZER1, 1568, 150); //G
+  delay(150);
+  tone(BUZZER1, 1661, 150); //G#
+  Serial.println("Ready to scan!");
+  timeElapsed = 0; //Reset the elapsed time
 
   status(GOOD);
 
-  delay(1000); //Was 2000
+  
 }
 
 
