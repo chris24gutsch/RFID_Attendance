@@ -80,23 +80,6 @@ void setup()
   //nano.enableDebugging(Serial);
   status(GOOD);
 
-  /*
-   * Initialize RTC module
-   */
-  //Serial.println("Initializing RTC Module");
-  //rtc.begin();
-  
-  /*
-  if (!rtc.begin()) {
-    Serial.println("  Couldn't find RTC");
-    while (1);
-    }
-    
-  if (rtc.lostPower()) {
-    Serial.println("  RTC lost power");
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    }
-  */
   // Setup client-only mode, "station"
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
