@@ -4,4 +4,3 @@ TODO:
 		Also make a count for how many times a person is late.
 			After 3 lates it counts as 1 absence.
 	2. Make a case statement for HTTP Response codes.
-	3. Add another buzzer when ready to scan.
