@@ -187,7 +187,6 @@ void loop()
   while (timeElapsed < interval) { //While time elapsed is less than 15 seconds
     responseType = nano.readTagEPC(myEPC, myEPClength, 500); //Scan for a new tag up to 500ms
     if (responseType == RESPONSE_SUCCESS) {
-      delay(500);
       
       //Set Status
       status(ERROR);
@@ -199,6 +198,8 @@ void loop()
      
       Serial.println(F("Data did not go through!"));
       Serial.println(F("Please wait 15 seconds between scans."));
+
+      delay(500); //Give the user time to pull their tag away before scanning
       
       responseType = 0; //Reset Response
       timeElapsed = 0;
