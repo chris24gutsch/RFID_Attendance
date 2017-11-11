@@ -30,6 +30,7 @@ void setup()
   while (!Serial);  //wait until open
 
   //Initialize RFID
+  RFIDInit(RFID_DEBUGGING);
 
   //Initialize WiFi
   wifiInit(ssid); //Since VU-Media is unencrypted, a password is not needed
