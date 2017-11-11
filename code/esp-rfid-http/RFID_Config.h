@@ -27,6 +27,9 @@
 SoftwareSerial softSerial(13, 15); //RX, TX (from ESP's view)
 RFID nano;
 
+//Initializes the RFID Scanner
+//@param debug:
+//	Summary: takes a boolean input to turn debugging on or off
 void RFIDInit(bool debug) {
 	// Setup the pins for the buzzer
 	pinMode(BUZZER1, OUTPUT);

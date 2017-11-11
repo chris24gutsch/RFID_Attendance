@@ -4,24 +4,23 @@
 #include <ESP8266HTTPClient.h>
 #include "util.h"
 
+//Prints the ESP8266's MAC address
 uint8_t printMAC() {
 	byte mac[6];
 
 	WiFi.macAddress(mac);
 	Serial.println("");
 	Serial.print("MAC: ");
-	Serial.print(mac[0], HEX);
-	Serial.print(":");
-	Serial.print(mac[1], HEX);
-	Serial.print(":");
-	Serial.print(mac[2], HEX);
-	Serial.print(":");
-	Serial.print(mac[3], HEX);
-	Serial.print(":");
-	Serial.print(mac[4], HEX);
-	Serial.print(":");
-	Serial.println(mac[5], HEX);
-
+	for (uint8_t i = 0; i < sizeof(mac); i++) {
+		Serial.print(mac[i], HEX);
+		if (i == (sizeof(mac)-1)) {
+			Serial.println("");
+		}
+		else {
+			Serial.print(":");
+		}
+	}
+	
 	return WL_SCAN_COMPLETED;
 }
 
@@ -37,7 +36,12 @@ void networkScan() {
 	}
 }
 
-//Connects to the wifi given an SSID and passwork (if SSID isn't encrypted)
+//Connects to a network given an SSID and password (if SSID isn't encrypted).
+//@param ssid:
+//	Summary: SSID of the network you would like to connect to.
+//@param pass:
+//	Summary: Password of the network you would like to connect to.
+//			 Defaults to empty.
 void setNetwork(char* ssid, char *pass = "") {
 	if (pass == "") { //Unencrypted
 		WiFi.begin(ssid);
@@ -64,6 +68,12 @@ void setNetwork(char* ssid, char *pass = "") {
 
 }
 
+//Initializes the WiFi
+//@param ssid:
+//	Summary: SSID of the network you would like to connect to.
+//@param pass:
+//	Summary: Password of the network you would like to connect to.
+//			 Defaults to empty.
 uint8_t wifiInit(char* ssid, char *pass = "") {
 	//Following are handled in ESP8266WiFiSTA.cpp but this gives more of an idea of what went wrong
 	if (!ssid || *ssid == 0x00 || strlen(ssid) > 31) {
