@@ -1,10 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <SoftwareSerial.h> // communication between ESP and RFID reader
-#include "SparkFun_UHF_RFID_Reader.h" //Library for controlling the M6E Nano module
-#include "util.h"
-#include "WiFi_Config.h"
-#include "RFID_Config.h"
+#include "include/SparkFun_UHF_RFID_Reader.h" //Library for controlling the M6E Nano module
+#include "include/util.h"
+#include "include/WiFi_Config.h"
+#include "include/RFID_Config.h"
 
 #include <elapsedMillis.h> //https://playground.arduino.cc/Code/ElapsedMillis
 uint16_t interval = 15000;
