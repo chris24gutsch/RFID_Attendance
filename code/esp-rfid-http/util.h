@@ -1,10 +1,13 @@
+#pragma once //Keep GCC happy
+
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 
 /*
  * Configuration for the SparkFun WiFi Shield - ESP8266
  */
 
- #define ESP8266_LED 5  // attached to GPIO 5
-
+#define ESP8266_LED 5  // attached to GPIO 5
 
 /*
  * Call this in setup() to get the utilities ready to use.
@@ -13,7 +16,6 @@ void board_init() {
   pinMode(ESP8266_LED, OUTPUT);
   digitalWrite(ESP8266_LED, HIGH);
 }
-
 
 /*
  * Convenience function to flash a pattern
