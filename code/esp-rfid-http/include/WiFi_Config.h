@@ -36,7 +36,7 @@ void networkScan() {
 	}
 }
 
-//Connects to a network given an SSID and password (if SSID isn't encrypted).
+//Connects to a network given an SSID and password (if SSID is encrypted).
 //@param ssid:
 //	Summary: SSID of the network you would like to connect to.
 //@param pass:
